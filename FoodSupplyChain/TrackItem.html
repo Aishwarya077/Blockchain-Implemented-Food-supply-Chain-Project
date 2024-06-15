@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Item</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmxvY2tjaGFpbnxlbnwwfHwwfHx8MA%3D%3D'); /* Replace 'background.jpg' with your background image */
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .search-form {
+            width: 400px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ced4da;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .search-input {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .search-btn {
+            width: 100%;
+        }
+        .result-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .result {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+		#homeLink {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+	<a id="homeLink" href="javascript:goToHomePage()">Home</a>
+</div>
+<div class="container">
+	
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="search-container">
+                <form class="search-form" id="search-form">
+                    <div class="form-group">
+                        <input type="text" class="search-input form-control" placeholder="Enter Item ID">
+                    </div>
+                    <button type="submit" class="search-btn btn btn-primary btn-block">Search</button>
+                </form>
+                <div class="result-container">
+                    <div class="result" id="result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Web3.js -->
+<script src="https://cdn.jsdelivr.net/npm/web3@1.3.5/dist/web3.min.js"></script>
+
+<script>
+	function goToHomePage() {
+				window.location.href = "Home.html";
+			}
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const itemId = document.querySelector('.search-input').value;
+        // Call the getItemDetails function from the Solidity contract using Web3.js
+        // Update the result container with the details of the item
+        const contractAddress = '0x9cEDF770c72aB1A32c300ba2141f16b98204c029'; // Replace with your contract address
+        const contractABI = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "UserLoggedIn",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "UserRegistered",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "loggedInUsers",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "login",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "register",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "registeredUsers",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+        const web3 = new Web3(window.ethereum);
+        const itemManagerContract = new web3.eth.Contract(contractABI, contractAddress);
+        itemManagerContract.methods.getItemDetails(itemId).call()
+            .then(function(result) {
+                const itemName = result[0];
+                const expireDate = result[1];
+                const resultElement = document.getElementById('result');
+                resultElement.innerHTML = `<strong>Item Name:</strong> ${itemName}<br><strong>Expire Date:</strong> ${new Date(expireDate * 1000).toLocaleDateString()}`;
+                document.querySelector('.result-container').style.display = 'block';
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('Item with this ID does not exist');
+            });
+    });
+</script>
+
+</body>
+</html>

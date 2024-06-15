@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmxvY2tjaGFpbnxlbnwwfHwwfHx8MA%3D%3D'); /* Replace 'background.jpg' with your background image */
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #homeLink {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .profile-card {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a id="homeLink" href="javascript:goToHomePage()">Home</a>
+</div>
+    <div class="profile-card">
+        <img src="profile.jpg" alt="Profile Image" class="profile-img">
+        <h6>Welcome <span id="username"></span></h6>
+    </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5 p-4">
+                <div class="card-header">
+                    Welcome <span id="username"></span>
+                </div>
+                <div class="card-body">
+                    <form id="add-item-form">
+                        <div class="form-group">
+                            <label for="id">ID:</label>
+                            <input type="text" class="form-control" id="id" name="id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Quantity:</label>
+                            <input type="text" class="form-control" id="quantity" name="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="expire_date">Request Date:</label>
+                            <input type="text" class="form-control" id="expire_date" name="expire_date" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Add Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/web3@4.5.0/dist/web3.min.js"></script>
+<script>
+    function goToHomePage() {
+				window.location.href = "Home.html";
+    }
+    // Function to connect to the Ethereum network using MetaMask
+async function connectToNetwork() {
+    if (typeof window.ethereum !== 'undefined') {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const web3 = new Web3(window.ethereum);
+        const contractABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_expireDate",
+				"type": "uint256"
+			}
+		],
+		"name": "addItem",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "expireDate",
+				"type": "uint256"
+			}
+		],
+		"name": "ItemAdded",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_itemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getItemDetails",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "itemCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "items",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "expireDate",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+const contractAddress = "0xA00d3d56642c7b756CcD11b930ad832095276DDd";
+        return new web3.eth.Contract(contractABI, contractAddress);
+    } else {
+        throw new Error('MetaMask is not installed.');
+    }
+}
+
+// Function to add an item using the smart contract
+async function addItemToContract(name, quantity, expireDate) {
+    const contract = await connectToNetwork();
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    const account = accounts[0];
+    
+    // Call the addItem function of the smart contract
+    await contract.methods.addItem(name, quantity, expireDate).send({ from: account });
+    alert('Item added successfully!');
+}
+
+// Function to get item details by ID from the smart contract
+async function getItemDetailsFromContract(itemId) {
+    const contract = await connectToNetwork();
+    const details = await contract.methods.getItemDetails(itemId).call();
+    alert(`Item Details: Name - ${details[0]}, Quantity - ${details[1]}, Expire Date - ${new Date(details[2] * 1000)}`);
+}
+
+// Add event listener to the form for adding an item
+document.getElementById('add-item-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const name = this.name.value;
+    const quantity = parseInt(this.quantity.value);
+    const expireDate = this.expire_date.value;
+    
+    addItemToContract(name, quantity, expireDate);
+});
+
+// Function to display the item details when called with an ID
+function getItemDetailsById() {
+    const itemId = parseInt(prompt('Enter item ID:'));
+    if (!isNaN(itemId)) {
+        getItemDetailsFromContract(itemId);
+    } else {
+        alert('Invalid item ID.');
+    }
+}
+
+</script>
+</body>
+</html>

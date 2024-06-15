@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Supply chain </title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, sans-serif;
+    list-style: none;
+}
+
+
+nav {
+    width: 100%;
+    height: 50px;
+    position: fixed;
+    background-color: black;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+nav ul {
+    width: 60%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+nav ul li {
+    display: block;
+    float: left;
+    width: 25%;
+    text-align: center;
+    line-height: 50px;
+}
+
+nav ul li a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+nav ul li a::after {
+    content: '';
+    height: 0px;
+    width: 100%;
+    position: absolute;
+    background-color: #6aa371;
+    bottom: 0;
+    left: 0;
+    transition: all ease-in-out 0.2s;
+}
+
+nav ul li a:hover {
+    background-color: #5d9c7a;
+}
+
+nav ul li a:hover::after {
+    height: 2px;
+}
+
+#welcome-section {
+    background-image: url("https://www.telefonica.com/en/wp-content/uploads/sites/5/2022/06/Imagen1.jpg?w=1224&h=673&crop=1");
+    min-height: 100%;
+    background-attachment: fixed; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#welcome-section {
+    height: 754px;
+    width: auto;
+}
+
+.header {
+    position: relative;
+    text-align: center;
+    padding-top: 20%;
+    width: 450px;
+    margin: 0 auto;
+}
+
+
+
+h1, h2 {
+    border-bottom: solid rgb(0, 0, 0) 2px;
+    padding-bottom: 5px;
+
+}
+
+p{text-align: center;}
+
+.me {
+    background-color: rgba(40, 82, 173, 0.19);
+    padding-top: 50px;
+    
+}
+
+.abt-header
+
+
+    {
+    width: 450px;
+    top: 250px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 35px;
+    text-align: center;
+    margin-left: 4%;
+    margin-right: auto;
+}
+
+
+
+
+.box {
+    color: black;
+    border-radius: 5px;
+    align-self: center;
+    justify-content: center;
+    align-content: center;
+}
+
+
+.skills {
+    background-color: rgba(10, 16, 30, 0.34);
+    padding-top: 50px;
+
+}
+
+.skills-header {
+    width: 450px;
+    top: 250px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+.grid-skill {
+    display: grid;
+    /*border: 2px red solid;*/
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 10px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.box-skill {
+    color: black;
+    border-radius: 5px;
+    /*background-color: beige;*/
+    align-self: center;
+    justify-content: center;
+    align-content: left;
+}
+
+
+
+.work {
+    background-color: rgba(237, 153, 57, 0.65);
+    padding-top: 50px;
+}
+
+.work-header {
+    width: 450px;
+    top: 250px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.grid-work {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 35px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.box-work {
+    color: black;
+    border-radius: 5px;
+    background-color: #9cdbbe;
+    border: 2px #000000 solid;
+    align-self: center;
+    justify-content: center;
+    align-content: center;
+}
+
+
+.touch {
+    background-color: rgba(26, 29, 29, 0.14);
+}
+
+.touch-header {
+    width: 450px;
+    top: 250px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.grid-con {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    grid-gap: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.box-con {
+    color: black;
+    border-radius: 5px;
+    align-self: center;
+    justify-content: center;
+    align-content: center;
+}
+
+
+.profile-pic {
+    display: block;
+    max-width: 350px;
+    max-height: auto;
+    width: auto;
+    height: auto;
+    border-radius: 50%;
+}
+
+.grid, .grid-skill, .grid-work, .grid-con{
+    padding: 40px 60px 40px 60px;
+}
+
+
+.proj-1{
+    height: 150px;
+    width: auto;
+}
+
+
+.box-con2{
+    margin-top: 24%;
+    font-size: 20px;
+}
+
+.gitlink{
+    padding-left: 10%;
+    padding-right: 10%;
+    
+}
+footer {
+    background-color: #000000;
+    padding: 10px 20px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #ffffff;
+    font-size: 14px;
+    border-top: 1px solid #000000;
+}
+
+@media (max-width:768px) {
+    .box-con1{
+         position: relative;
+            padding-bottom: 75%;
+            height: 0;
+            overflow: hidden;
+        }
+
+    .box-con1 iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
+    
+    h1, h2{
+    border-bottom: solid rgb(0, 0, 0) 2px;
+    padding-bottom: 2px;
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        
+        
+}
+
+    .header, .abt-header, .skills-header, .work-header, .touch-header{
+        width: 300px
+    }
+    
+    .profile-pic{
+        width: 200px;
+        margin: 0 auto;
+    }
+}
+body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        background-color: #f0f0f0;
+    }
+    .name {
+        margin-right: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+    .name-container {
+        position: absolute;
+        top: 5px; /* Adjust as needed */
+        right: 20px; /* Adjust as needed */
+        background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent background */
+        padding: 10px 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .name {
+        font-size: 18px;
+        color: #fff9f9;
+        font-weight: bold;
+    }
+
+    </style>
+</head>
+
+<body>
+    
+    <nav id="navbar">
+        
+        <ul>
+            <li><a href="HowItWorks.html
+                "><i class="fa fa-question-circle"></i>How SupplyChain works using solidity</a> </li>
+            <li> <a href="Login.html"><i class="fa fa-user"></i>Create Item</a> </li>
+            <li><a href="Login3.html"><i class="fa fa-th"></i>Records</a></li>
+        </ul>
+        <div class="name-container">
+            <div class="name">@AishwaryaR</div>
+    </nav>
+
+
+
+    <!--<img class="image" src="https://www.cyberworx.in/images/services/website-startups.jpg" alt="computer on a desk background">-->
+    <div class="main-container">
+        <div id="welcome-section">
+            <div class="header">
+                <h1 style="color:#FFFFFF;">Welcome to Food Supply Chain</h1>
+                <h3 style="color:#FFFFFF;">Tracking the journey of your From from farm to You're Plate using blockchain technology.</h3>
+
+            </div>
+        </div>
+
+        <div id="about" class="me">
+
+            <div class="abt-header">
+                <h2>Blockchain Supply Chain</h2>
+                <h4>What is it?<h4>
+            </div>
+
+            <div class="grid">
+                <div class="box 1">
+                    <p>A supply chain is a network of companies and people that are involved in the <em>production and delivery of a product or service</em><br> 
+                        With blockchain, supply chain companies can document production updates to a single shared ledger, which provides <em>complete data visibility and a single source of truth.</em><br><br>
+                    </p>
+                </div>
+                <div class="box 2"> <img class="SupplyChain" src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*YGrkQr8jUWL5lIDqph6oVw.png" alt="SupplyChain"> </div>
+                <div class="box 3">
+                </div>
+            </div>
+        </div>
+
+    <div id="skills" class="skills">
+        <div class="skills-header">
+            <h2>Companies who Implemented</h2>
+            <h4>Here are some companies who implemented this technology<h4>
+        </div>
+
+        <div class="grid-con">
+            <div class="box-con1">
+                <iframe src="Company implemented.jpg" width="400" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+
+
+            </div>
+
+            <div class="box-skill 2">
+                <p> <strong>Food companies</strong><br/><br/>
+                    <ul>
+                        <li>Walmart</li>
+                        <div class="w3-light-grey w3-round">
+                            <div class="w3-container w3-round w3-green" style="width:50%">50%</div>
+                        </div>
+                        <li>Nestle</li>
+                        <div class="w3-light-grey w3-round">
+                            <div class="w3-container w3-round w3-green" style="width:20%">20%</div>
+                        </div>
+                        <li>Tyson Foods</li>
+                        <div class="w3-light-grey w3-round">
+                            <div class="w3-container w3-round w3-green" style="width:30%">30%</div>
+                        </div>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div id="contact" class="touch">
+        <div class="touch-header">
+            <h2>contact</h2>
+            <h4>Blockchain food supply chain<h4>
+        </div>
+
+        <div class="grid-con">
+            <div class="box-con1">
+                <iframe src="map.png" width="500" height="500" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>-
+            <div class="box-con2">
+                <ul>
+                    <li><i class="fa fa-building"></i>SCcompany</li>
+                    <li><i class="fa fa-phone"></i>122-4345635</li>
+                    <li><i class="fa fa-envelope"></i>sccompany@gmail.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i>Bangalore, India</li>
+                    
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+    
+
+
+    
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script src="Test.js"></script>
+    <footer>
+        <p>&copy; 2024 Blockchain Food Supply chain. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

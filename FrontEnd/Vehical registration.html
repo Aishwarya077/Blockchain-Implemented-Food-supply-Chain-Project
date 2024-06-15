@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Registration Number Validation</title>
+</head>
+<body>
+    <form onvalidate='return validateVehicleNumbe()' action="practise2.html">
+  <h2>Enter Vehicle Registration Number:</h2>
+  <form id="vehicleForm" onsubmit="return validateVehicleNumber()">
+    <label for="regNumber">Registration Number:</label>
+    <input type="text" id="regNumber" name="regNumber" placeholder="Enter vehicle registration number">
+    <button type="submit">Validate</button>
+  </form>
+
+  <script>
+    function validateVehicleNumber() {
+      const regNumber = document.getElementById('regNumber').value.trim();
+
+      // Check if the registration number matches the pattern KA04MA2341
+      const regPattern = /^KA\d{2}[A-Z]{2}\d{4}$/; // Assumes KA as state code, 04 as RTO code, MA as vehicle code
+      if (!regPattern.test(regNumber)) {
+        alert('Please enter a valid vehicle registration number (e.g., KA04MA2341)');
+        return false; // Prevent form submission
+      }
+
+      // Validation passed, continue with form submission or other actions
+      return true;
+    }
+  </script>
+    </form>
+</body>
+</html>

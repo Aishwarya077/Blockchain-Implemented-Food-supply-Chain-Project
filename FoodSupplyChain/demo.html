@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Supply Chain Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbeEv9krCmiUqcL0sJHPN0Jp3v-5uUED2Ufe3FUAdi0g&s");
+        }
+
+        .container-box {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            background-color: #6b9570;
+            margin-top: 50px; /* Added margin top */
+            color: black; /* Changed text color to black */
+            position: relative; /* Added position relative for back link */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            background-color: #2b73c1;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #2366ae;
+        }
+
+        .navbar {
+            background-color: #314e42 !important;
+        }
+
+        .navbar-brand {
+            color: #000000 !important;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #111723;
+        }
+
+        .alert {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            color: #314e42;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        #backLink {
+            position: fixed; /* Fixed position */
+            top: 100px; /* Distance from the top */
+            left: 10px; /* Distance from the left */
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .name-container {
+            position: absolute;
+            top: 20px; /* Adjust as needed */
+            right: 20px; /* Adjust as needed */
+            background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent background */
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .name {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container-box">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">FoodChain</a>
+            </div>
+        </nav>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form id="createItemForm" class="mb-4">
+                    <div class="form-group">
+                        <label for="itemName">Item Name:</label>
+                        <input type="text" id="itemName" class="form-control" required>
+                        <label for="itemQuantity">Item Quantity:</label>
+                        <input type="text" id="itemQuantity" class="form-control" required>
+                        <label for="itemDescription">Item Description:</label>
+                        <input type="text" id="itemDescription" class="form-control" required>
+                        <label for="itemPrice">Item Price:</label>
+                        <input type="text" id="itemPrice" class="form-control" required>
+                        <label for="itemCategory">Item Category:</label>
+                        <input type="text" id="itemCategory" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Item</button>
+                    <a id="homeLink" href="javascript:goToHomePage()" class="btn btn-primary">Home</a>
+                </form>
+                <div id="statusUpdateForm" style="display:none;">
+                    <div class="form-group">
+                        <label for="itemStatus">Update Status:</label>
+                        <select id="itemStatus" class="form-control">
+                            <option value="1">In Transit</option>
+                            <option value="2">Delivered</option>
+                        </select>
+                    </div>
+                    <button type="button" id="updateStatusBtn" class="btn btn-primary">Update Status</button>
+                </div>
+                <div id="statusMessage" class="alert alert-success" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="name-container">
+        <div class="name">@AishwaryaR</div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+    <script>
+        function goToHomePage() {
+            window.location.href = "Home.html";
+        }
+        async function connectToMetaMask() {
+            try {
+                // Request access to the user's MetaMask account
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                const producerAccount = accounts[0];
+
+                return producerAccount;
+            } catch (error) {
+                console.error('Error connecting to MetaMask:', error);
+                throw new Error('Error connecting to MetaMask.');
+            }
+        }
+
+        async function createItem(itemName, producerAccount) {
+            try {
+                // Connect to the Ethereum network
+                const web3 = new Web3(window.ethereum);
+
+                // ABI and address of the FoodSupplyChain contract
+                const contractABI = [
+                [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "itemName",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "producer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "productionDate",
+				"type": "uint256"
+			}
+		],
+		"name": "ItemProduced",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_itemName",
+				"type": "string"
+			}
+		],
+		"name": "produceItem",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_itemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getItemDetails",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "itemName",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "producer",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "productionDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isProduced",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "itemCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "items",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "itemName",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "producer",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "productionDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isProduced",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+
+                ];
+                const contractAddress = '0xe09F69a5B06389d0dC9b0e45F923d8c76A7e206f'; // Replace with your contract address
+                const foodSupplyChainContract = new web3.eth.Contract(contractABI, contractAddress);
+
+                // Prepare the transaction
+                const tx = await foodSupplyChainContract.methods.produceItem(itemName).send({
+                    from: producerAccount
+                });
+
+                return tx.transactionHash;
+            } catch (error) {
+                console.error('Error creating item:', error);
+                throw new Error('Error creating item.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const createItemForm = document.getElementById('createItemForm');
+            const statusMessage = document.getElementById('statusMessage');
+
+            createItemForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const itemName = document.getElementById('itemName').value.trim();
+
+                try {
+                    const producerAccount = await connectToMetaMask();
+
+                    // Display the user's Ethereum address
+                    statusMessage.textContent = `Connected to MetaMask. Your Ethereum address: ${producerAccount}`;
+                    statusMessage.style.color = '#008000'; // Green color for success message
+
+                    const transactionHash = await createItem(itemName, producerAccount);
+
+                    // Display success message
+                    statusMessage.textContent = `Transaction successful. Transaction hash: ${transactionHash}`;
+                    statusMessage.style.color = '#008000'; // Green color for success message
+                } catch (error) {
+                    console.error('Error:', error);
+                    statusMessage.textContent = 'Error: Could not create item. Please try again.';
+                    statusMessage.style.color = '#ff0000'; // Red color for error message
+                }
+            });
+        });
+    </script>
+</body>
+</html>

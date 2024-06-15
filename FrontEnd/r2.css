@@ -1,0 +1,36 @@
+body{
+    margin-top: 18px;
+    }
+    
+    .column {
+    float: left;
+    }
+    
+    .left {
+    width: 30%;
+    background-color:rgb(199, 159, 229);
+    height: 100%;
+    }
+    
+    .right {
+    width: 70%;
+    height: 100%;
+    }
+    
+    img {
+    border-radius: 50%;
+    }
+    
+    p {
+    line-height: 0;
+    color: white;
+    }
+    h3{
+    color: white;
+}
+h2{
+    color:white;
+}
+h4{
+    color:black;
+}

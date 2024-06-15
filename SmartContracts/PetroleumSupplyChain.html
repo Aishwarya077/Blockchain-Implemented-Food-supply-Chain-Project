@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petroleum Supply Chain DApp</title>
+    <link rel="stylesheet" href="r3.css">
+</head>
+<body>
+    <h1>Petroleum Supply Chain DApp</h1>
+    <p id="accountAddress"></p>
+    <p id="accountBalance"></p>
+    <button onclick="createShipment()">Petroleum Cost</button>
+    <div id="shipments"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.3/dist/web3.min.js"></script>
+    <script>
+        async function createShipment() {
+            const receiverAddress = '0xe4b8b8c8A38205A7b3d095aE5fB2D99fC99133c6'; 
+            const quantity = 10; 
+            const status = 'Pending'; 
+            
+            await window.contract.methods.createShipment(receiverAddress, quantity, status).send({ from: window.account });
+            console.log('Shipment created successfully.');
+            loadShipments(); // Refresh the shipment list after creating a new shipment
+        }
+
+        async function loadShipments() {
+            const totalShipments = await window.contract.methods.totalShipments().call();
+            const shipmentsDiv = document.getElementById('shipments');
+            shipmentsDiv.innerHTML = '';
+            for (let i = 1; i <= totalShipments; i++) {
+                const shipment = await window.contract.methods.shipments(i).call();
+                const shipmentInfo = `Shipment ID: ${shipment.shipmentId}, Supplier: ${shipment.supplier}, Receiver: ${shipment.receiver}, Quantity: ${shipment.quantity}, Status: ${shipment.status}`;
+                const shipmentDiv = document.createElement('div');
+                shipmentDiv.textContent = shipmentInfo;
+                shipmentsDiv.appendChild(shipmentDiv);
+            }
+        }
+
+        async function init() {
+            window.web3 = new Web3(window.ethereum);
+            await window.ethereum.enable();
+            const accounts = await window.web3.eth.getAccounts();
+            window.account = accounts[0];
+            const networkId = await window.web3.eth.net.getId();
+            const contractAddress = '0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8'; 
+            const contractABI = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "shipmentId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "supplier",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "ShipmentCreated",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_status",
+				"type": "string"
+			}
+		],
+		"name": "createShipment",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "shipments",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "shipmentId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "supplier",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "status",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalShipments",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+            window.contract = new window.web3.eth.Contract(contractABI, contractAddress);
+            loadShipments();
+        }
+
+        async function displayAccountInfo() {
+            const accounts = await window.web3.eth.getAccounts();
+            const accountAddress = accounts[0];
+            const balance = await window.web3.eth.getBalance(accountAddress);
+            const formattedBalance = window.web3.utils.fromWei(balance, 'ether');
+            document.getElementById('accountAddress').innerText = `Connected Account: ${accountAddress}`;
+            document.getElementById('accountBalance').innerText = `Balance: ${formattedBalance} ETH`;
+        }
+
+        window.onload = function() {
+            init();
+            displayAccountInfo();
+        };
+    </script>
+</body>
+</html>

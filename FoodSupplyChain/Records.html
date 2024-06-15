@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Supply Chain</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #4c634e;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #itemsList {
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        .name-container {
+            position: absolute;
+            top: 10px; /* Adjust as needed */
+            right: 20px; /* Adjust as needed */
+            background-color: rgba(38, 56, 46, 0.9); /* Semi-transparent background */
+            padding: 10px 20px;
+            border-radius: 2px;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+
+        .name {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+		#backLink {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    #backLink:hover {
+      color: #1b6731;
+    }
+
+        .item p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <a id="homeLink" href="javascript:goToHomePage()">Home</a>
+</div>
+  <div class="container">
+        <h1>Food Supply Chain</h1>
+        <form id="searchForm">
+            <label for="itemName">Item Name/ID</label>
+            <input type="number" id="itemName" required>
+            <button type="submit">Display</button>
+        </form>
+        <div id="itemsList"></div>
+		<div id="itemsContainer"></div>
+    </div>
+	<div class="name-container">
+        <div class="name">@AishwaryaR</div>
+    
+
+        <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+        <script>
+            function goToHomePage() {
+                window.location.href = "Home.html";
+            }
+        
+            const contractABI =[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_expireDate",
+				"type": "uint256"
+			}
+		],
+		"name": "addItem",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "expireDate",
+				"type": "uint256"
+			}
+		],
+		"name": "ItemAdded",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_itemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getItemDetails",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "itemCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "items",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "expireDate",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+	
+        
+            const contractAddress = "0xA00d3d56642c7b756CcD11b930ad832095276DDd"; // Your Solidity contract address
+        
+            let web3;
+            let contractInstance;
+        
+            async function init() {
+                if (typeof window.ethereum !== 'undefined') {
+                    web3 = new Web3(window.ethereum);
+                    try {
+                        await window.ethereum.enable();
+                        const accounts = await web3.eth.getAccounts();
+                        contractInstance = new web3.eth.Contract(contractABI, contractAddress, { from: accounts[0] });
+                        console.log('Contract instance created:', contractInstance);
+                    } catch (error) {
+                        console.error('Error initializing Web3:', error);
+                    }
+                } else {
+                    console.error('MetaMask is not installed.');
+                }
+            }
+        
+            async function getItemDetailsById(itemId) {
+                try {
+                    const item = await contractInstance.methods.getItemDetails(itemId).call();
+                    console.log('Item Details:', item);
+                    return item;
+                } catch (error) {
+                    console.error('Error getting item details:', error);
+                }
+            }
+        
+            async function displayItemDetails(itemId) {
+                const itemDetailsContainer = document.getElementById('itemsContainer');
+        
+                const item = await getItemDetailsById(itemId);
+        
+                if (item) {
+                    itemDetailsContainer.innerHTML = ''; // Clear previous item details
+        
+                    const itemIdParagraph = document.createElement('p');
+            itemIdParagraph.textContent = `Item ID: ${itemId}`;
+
+            const itemNameParagraph = document.createElement('p');
+            itemNameParagraph.textContent = `Item Name: ${item[0]}`;
+
+            const quantityParagraph = document.createElement('p');
+            quantityParagraph.textContent = `Quantity: ${item[1]}`;
+
+            const expireDateParagraph = document.createElement('p');
+            expireDateParagraph.textContent = `Expire Date: ${item[2]}`;
+        
+                    itemDetailsContainer.appendChild(itemIdParagraph);
+                    itemDetailsContainer.appendChild(itemNameParagraph);
+                    itemDetailsContainer.appendChild(quantityParagraph);
+                    itemDetailsContainer.appendChild(expireDateParagraph);
+                } else {
+                    const errorMessage = document.createElement('p');
+                    errorMessage.textContent = 'Item not found.';
+                    itemDetailsContainer.appendChild(errorMessage);
+                }
+            }
+        
+            document.getElementById('searchForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const itemId = parseInt(document.getElementById('itemName').value);
+                if (!isNaN(itemId)) {
+                    await displayItemDetails(itemId);
+                } else {
+                    alert('Please enter a valid item ID.');
+                }
+            });
+        
+            document.addEventListener('DOMContentLoaded', async () => {
+                await init();
+            });
+        </script>
+        
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <center>
+        <title>Draw Your Heart</title>
+        <style>
+            canvas{
+                border: 1px solid black
+            }
+        </style>
+    </head>
+    <body bgcolor="beige">
+        <header>
+            <h1>Draw Your Heart</h1>
+            <p>Draw on the canvas by clicking the mouse</p>
+        </header>
+        <article>
+          <h2>Canavas</h2>
+          <canvas id="myCanvas" width="400" height="400" onmousedown="startDrawing(event)" onmousemove="drawLine(event)" onmouseup="stopDrawing(event)"></canvas>  
+        </article>
+        <script>
+            var canvas=document.getElementById("myCanvas");
+            var ctx=canvas.getContext("2d");
+            var isDrawing=false;
+            function startDrawing(event) {
+            isDrawing=true;
+            ctx.fillStyle="pink"
+            ctx.fillRect(500,500,500,500)
+            }
+        </script>
+        </center>
+    </body>
+</html>
